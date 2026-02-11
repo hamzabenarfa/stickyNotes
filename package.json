@@ -1,6 +1,6 @@
 {
   "name": "sticky-notes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A modern, high-performance sticky notes application",
   "type": "module",
   "scripts": {

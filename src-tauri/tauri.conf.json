@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/nicegui/tauri/main/tooling/cli/schema.json",
     "productName": "StickyNotes",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "identifier": "com.stickynotes.app",
     "build": {
         "frontendDist": "../dist",
