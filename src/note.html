@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StickyNotes</title>
+  
+  <!-- Stitch Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="styles/global.css" />
+  <link rel="stylesheet" href="styles/note.css" />
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .material-icons-round { font-size: 20px; }
+  </style>
+</head>
+<body style="background: transparent;">
+  <div id="note-container" class="note note--yellow">
+    <!-- ─── Title Bar ─────────────────────────────────────── -->
+    <div class="note-titlebar" data-tauri-drag-region>
+      <div class="note-titlebar__left">
+        <button id="btn-new" class="note-titlebar__btn" title="New Note" aria-label="New Note">
+          <span class="material-icons-round" style="font-size: 18px;">add</span>
+        </button>
+      </div>
+
+      <span class="note-titlebar__title" id="note-title-display" data-tauri-drag-region></span>
+
+      <div class="note-titlebar__right">
+        <button id="btn-color" class="note-titlebar__btn" title="Change color" aria-label="Change color">
+          <span class="material-icons-round" style="font-size: 16px;">palette</span>
+        </button>
+        <button id="btn-manager" class="note-titlebar__btn" title="Open Manager" aria-label="Open Manager">
+          <span class="material-icons-round" style="font-size: 16px;">grid_view</span>
+        </button>
+        <button id="btn-close" class="note-titlebar__btn note-titlebar__btn--close" title="Close note" aria-label="Close note">
+          <span class="material-icons-round" style="font-size: 18px;">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── Color Picker ──────────────────────────────────── -->
+    <div id="color-picker" class="color-picker">
+      <button class="color-picker__swatch color-picker__swatch--yellow" data-color="yellow" title="Yellow" aria-label="Yellow"></button>
+      <button class="color-picker__swatch color-picker__swatch--blue" data-color="blue" title="Blue" aria-label="Blue"></button>
+      <button class="color-picker__swatch color-picker__swatch--green" data-color="green" title="Green" aria-label="Green"></button>
+      <button class="color-picker__swatch color-picker__swatch--pink" data-color="pink" title="Pink" aria-label="Pink"></button>
+    </div>
+
+    <!-- ─── Editor ────────────────────────────────────────── -->
+    <div class="note-editor" onclick="document.querySelector('.ProseMirror').focus()">
+      <div id="editor"></div>
+    </div>
+
+    <!-- ─── Formatting Toolbar ────────────────────────────── -->
+    <div class="note-toolbar">
+      <button id="tb-bold" class="note-toolbar__btn" title="Bold (Ctrl+B)" aria-label="Bold">
+        <span class="material-icons-round" style="font-size: 18px;">format_bold</span>
+      </button>
+      <button id="tb-italic" class="note-toolbar__btn" title="Italic (Ctrl+I)" aria-label="Italic">
+        <span class="material-icons-round" style="font-size: 18px;">format_italic</span>
+      </button>
+      <button id="tb-underline" class="note-toolbar__btn" title="Underline (Ctrl+U)" aria-label="Underline">
+        <span class="material-icons-round" style="font-size: 18px;">format_underlined</span>
+      </button>
+      <button id="tb-strike" class="note-toolbar__btn" title="Strikethrough" aria-label="Strikethrough">
+        <span class="material-icons-round" style="font-size: 18px;">format_strikethrough</span>
+      </button>
+      <div class="note-toolbar__separator"></div>
+      <button id="tb-bullet" class="note-toolbar__btn" title="Bullet List" aria-label="Bullet List">
+        <span class="material-icons-round" style="font-size: 18px;">format_list_bulleted</span>
+      </button>
+      <button id="tb-ordered" class="note-toolbar__btn" title="Ordered List" aria-label="Ordered List">
+        <span class="material-icons-round" style="font-size: 18px;">format_list_numbered</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tiptap via Vite -->
+  <script type="module" src="/js/note.js"></script>
+</body>
+</html>

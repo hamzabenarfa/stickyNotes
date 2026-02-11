@@ -1,0 +1,25 @@
+{
+  "name": "sticky-notes",
+  "version": "1.0.0",
+  "description": "A modern, high-performance sticky notes application",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "keywords": [],
+  "author": "StickyNotes",
+  "license": "ISC",
+  "devDependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/cli": "^2.10.0",
+    "@tiptap/core": "^3.19.0",
+    "@tiptap/extension-placeholder": "^3.19.0",
+    "@tiptap/extension-underline": "^3.19.0",
+    "@tiptap/starter-kit": "^3.19.0",
+    "vite": "^7.3.1"
+  },
+  "main": "index.js"
+}

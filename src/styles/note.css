@@ -1,0 +1,302 @@
+/* ═══════════════════════════════════════════════════════════════
+   StickyNotes — Sticky Note Window (note.css)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Note Container ────────────────────────────────────────── */
+
+.note {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-note);
+    animation: scaleIn var(--transition-base) forwards;
+
+    /* Default color (yellow) */
+    --note-bg: var(--note-yellow-bg);
+    --note-header: var(--note-yellow-header);
+    --note-accent: var(--note-yellow-accent);
+    --note-text: var(--note-yellow-text);
+    --note-toolbar: var(--note-yellow-toolbar);
+
+    background: var(--note-bg);
+    color: var(--note-text);
+}
+
+/* ─── Color Variants ────────────────────────────────────────── */
+
+.note--yellow {
+    --note-bg: var(--note-yellow-bg);
+    --note-header: var(--note-yellow-header);
+    --note-accent: var(--note-yellow-accent);
+    --note-text: var(--note-yellow-text);
+    --note-toolbar: var(--note-yellow-toolbar);
+}
+
+.note--blue {
+    --note-bg: var(--note-blue-bg);
+    --note-header: var(--note-blue-header);
+    --note-accent: var(--note-blue-accent);
+    --note-text: var(--note-blue-text);
+    --note-toolbar: var(--note-blue-toolbar);
+}
+
+.note--green {
+    --note-bg: var(--note-green-bg);
+    --note-header: var(--note-green-header);
+    --note-accent: var(--note-green-accent);
+    --note-text: var(--note-green-text);
+    --note-toolbar: var(--note-green-toolbar);
+}
+
+.note--pink {
+    --note-bg: var(--note-pink-bg);
+    --note-header: var(--note-pink-header);
+    --note-accent: var(--note-pink-accent);
+    --note-text: var(--note-pink-text);
+    --note-toolbar: var(--note-pink-toolbar);
+}
+
+/* ─── Title Bar (drag region) ───────────────────────────────── */
+
+.note-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--note-header);
+    min-height: 38px;
+    -webkit-app-region: drag;
+    app-region: drag;
+    user-select: none;
+}
+
+.note-titlebar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+}
+
+.note-titlebar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+}
+
+.note-titlebar__btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    opacity: 0.7;
+}
+
+.note-titlebar__btn:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.note-titlebar__btn--close:hover {
+    background: rgba(239, 83, 80, 0.2);
+    color: #D32F2F;
+}
+
+.note-titlebar__title {
+    flex: 1;
+    text-align: center;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ─── Color Picker (in menu) ────────────────────────────────── */
+
+.color-picker {
+    position: absolute;
+    top: 42px;
+    right: var(--space-md);
+    display: none;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    animation: scaleIn var(--transition-fast) forwards;
+}
+
+.color-picker.active {
+    display: flex;
+}
+
+.color-picker__swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.color-picker__swatch:hover {
+    transform: scale(1.2);
+}
+
+.color-picker__swatch.active {
+    border-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.color-picker__swatch--yellow {
+    background: var(--note-yellow-accent);
+}
+
+.color-picker__swatch--blue {
+    background: var(--note-blue-accent);
+}
+
+.color-picker__swatch--green {
+    background: var(--note-green-accent);
+}
+
+.color-picker__swatch--pink {
+    background: var(--note-pink-accent);
+}
+
+/* ─── Editor Area ───────────────────────────────────────────── */
+
+.note-editor {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    cursor: text;
+}
+
+.note-editor .tiptap {
+    min-height: 100%;
+    flex: 1;
+    outline: none;
+    font-size: var(--font-size-base);
+    line-height: 1.65;
+    color: var(--note-text);
+}
+
+.note-editor .tiptap p {
+    margin-bottom: var(--space-sm);
+}
+
+.note-editor .tiptap ul,
+.note-editor .tiptap ol {
+    padding-left: var(--space-xl);
+    margin-bottom: var(--space-sm);
+}
+
+.note-editor .tiptap ul {
+    list-style: disc;
+}
+
+.note-editor .tiptap ol {
+    list-style: decimal;
+}
+
+.note-editor .tiptap li {
+    margin-bottom: 2px;
+}
+
+.note-editor .tiptap strong {
+    font-weight: 700;
+}
+
+.note-editor .tiptap em {
+    font-style: italic;
+}
+
+.note-editor .tiptap u {
+    text-decoration: underline;
+}
+
+.note-editor .tiptap s {
+    text-decoration: line-through;
+}
+
+.note-editor .tiptap p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: var(--note-text);
+    opacity: 0.35;
+    pointer-events: none;
+    float: left;
+    height: 0;
+}
+
+/* ─── Formatting Toolbar ────────────────────────────────────── */
+
+.note-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--note-toolbar);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+}
+
+.note-toolbar__btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    opacity: 0.6;
+}
+
+.note-toolbar__btn:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.note-toolbar__btn.active {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.note-toolbar__separator {
+    width: 1px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 var(--space-xs);
+}
+
+/* ─── Resize Handle ─────────────────────────────────────────── */
+
+.note-resize {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.note:hover .note-resize {
+    opacity: 0.3;
+}

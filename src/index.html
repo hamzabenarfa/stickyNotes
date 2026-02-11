@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>StickyNotes</title>
+    <!-- Keep existing styles for compatibility (settings window might use them if shared) -->
+    <link rel="stylesheet" href="styles/global.css" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#141414",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#191919",
+                        "neutral-50": "#fafafa",
+                        "neutral-100": "#f5f5f5",
+                        "neutral-200": "#e5e5e5",
+                        "neutral-300": "#d4d4d4",
+                        "neutral-800": "#262626",
+                        "note-yellow": "#FFF7D1",
+                        "note-green": "#E2F6D3",
+                        "note-blue": "#D4EBF7",
+                        "note-pink": "#F7D4D4",
+                        "note-purple": "#E8D4F7",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            /* Override global.css body font/bg if needed, or let Tailwind classes on body take precedence */
+        }
+    </style>
+</head>
+<body class="text-primary dark:text-white font-display h-screen antialiased selection:bg-primary/20">
+<!-- Mobile Container -->
+<div class="max-w-md mx-auto h-screen relative flex flex-col bg-white dark:bg-[#202020] shadow-2xl overflow-hidden rounded-2xl">
+    <!-- Top Status Bar Area (Simulated - Optional, keeping for fidelity) -->
+    <!-- Top Status Bar Area (Custom Drag Region) -->
+    <div data-tauri-drag-region class="h-12 w-full bg-white/80 dark:bg-[#202020]/80 backdrop-blur-md sticky top-0 z-50 flex items-center justify-between px-6 pt-2 select-none">
+        <span class="text-sm font-semibold tracking-wide pointer-events-none">StickyNotes</span>
+        <div class="flex gap-2">
+            <button id="titlebar-minimize" class="w-6 h-6 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center text-neutral-500 hover:text-primary dark:hover:text-white transition-colors">
+                <span class="material-icons-round text-sm">remove</span>
+            </button>
+            <button id="titlebar-close" class="w-6 h-6 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 flex items-center justify-center text-neutral-500 hover:text-red-500 transition-colors">
+                <span class="material-icons-round text-sm">close</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Header Section -->
+    <header class="px-6 pb-2 pt-4 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight text-primary dark:text-white">Notes</h1>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium" id="notes-count">0 notes</p>
+        </div>
+        <button id="btn-settings" class="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-primary dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+            <span class="material-icons-round">settings</span>
+        </button>
+    </header>
+
+    <!-- Search & Filter Section -->
+    <div class="px-6 py-4 space-y-4">
+        <!-- Search Bar -->
+        <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary dark:group-focus-within:text-white transition-colors">
+                <span class="material-icons-round">search</span>
+            </span>
+            <input id="search-input" class="w-full bg-neutral-100 dark:bg-neutral-800 border-none rounded-xl py-3 pl-10 pr-4 text-sm font-medium placeholder-neutral-400 focus:ring-2 focus:ring-primary/20 dark:focus:ring-white/20 transition-all outline-none" placeholder="Search titles or content..." type="text"/>
+        </div>
+        <!-- Filter Chips (Static for now, but good for design fidelity) -->
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+            <button class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-semibold whitespace-nowrap shadow-soft">All Notes</button>
+            <button class="px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-semibold whitespace-nowrap hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+                <span class="flex items-center gap-1"><span class="material-icons-round text-[14px]">star</span> Starred</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Note Grid (Masonry-ish Layout) -->
+    <div class="flex-1 overflow-y-auto px-6 pb-24">
+        <div id="notes-list" class="columns-2 gap-4 space-y-4">
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-10 text-center col-span-2 w-full">
+                <span class="material-icons-round text-4xl text-neutral-300 mb-2">note_add</span>
+                <p class="text-neutral-400 text-sm">No notes yet. Tap + to add one.</p>
+            </div>
+            <!-- Notes will be injected here via JS -->
+        </div>
+    </div>
+
+    <!-- Floating Action Button (New Note) -->
+    <button id="btn-new-note" class="absolute bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-2xl shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-20 group">
+        <span class="material-icons-round text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
+    </button>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="absolute bottom-0 w-full h-[88px] bg-white dark:bg-[#202020] border-t border-neutral-100 dark:border-neutral-800 flex items-start pt-4 justify-around z-10 pb-8">
+        <button class="flex flex-col items-center gap-1 w-16 group">
+            <span class="material-icons-round text-primary dark:text-white group-hover:scale-110 transition-transform">grid_view</span>
+            <span class="text-[10px] font-bold text-primary dark:text-white">Grid</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 w-16 group">
+            <span class="material-icons-round text-neutral-400 group-hover:text-primary dark:group-hover:text-white group-hover:scale-110 transition-all">format_list_bulleted</span>
+            <span class="text-[10px] font-bold text-neutral-400 group-hover:text-primary dark:group-hover:text-white transition-colors">List</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 w-16 group">
+            <span class="material-icons-round text-neutral-400 group-hover:text-primary dark:group-hover:text-white group-hover:scale-110 transition-all">search</span>
+            <span class="text-[10px] font-bold text-neutral-400 group-hover:text-primary dark:group-hover:text-white transition-colors">Find</span>
+        </button>
+    </nav>
+</div>
+
+<script type="module" src="/js/manager.js"></script>
+</body>
+</html>

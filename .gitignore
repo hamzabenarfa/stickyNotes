@@ -1,0 +1,25 @@
+.agent
+.agents
+.env
+dist
+node_modules
+src-tauri/target
+
+npm-debug.log
+yarn-error.log
+.env
+
+# Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output
+dist/
+build/
+response.json
